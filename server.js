@@ -4,8 +4,10 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const fs = require('fs')
 
-const app = express()
-const PORT = 3000
+const app = express();
+const PORT = 3000;
+// const mongURI = "mongodb://admin:password@localhost:27017";
+const mongURI = "mongodb://admin:password@mongodb";
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -25,7 +27,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/get-profile', function(req, res){
-    MongoClient.connect("mongodb://admin:password@localhost:27017", function(err, client){
+    MongoClient.connect(mongURI , function(err, client){
         if(err) throw err;
         const db = client.db('user-account');
         const query = { userId: 1};
@@ -39,7 +41,7 @@ app.get('/get-profile', function(req, res){
 
 app.post('/update-profile', function(req, res){
     const userObj = req.body;
-    MongoClient.connect("mongodb://admin:password@localhost:27017", function(err, client){
+    MongoClient.connect(mongURI , function(err, client){
         if(err) throw err;
         const db = client.db('user-account');
         userObj.userId = 1
