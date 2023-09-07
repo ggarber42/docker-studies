@@ -64,12 +64,8 @@
 </style>
 <script>
    (async function init() {
-        // const response = await fetch('http://localhost:3000/get-profile');
-        // console.log("response", response);
-        // const user = await response.json();
-        // console.log(JSON.stringify(user));
-
-        const user = {}
+        const response = await fetch('http://localhost:3000/get-profile');
+        const user = await response.json() || {};
 
         document.getElementById('name').textContent = user.name ? user.name : 'Anna Smith';
         document.getElementById('email').textContent = user.email ? user.email : 'anna.smith@example.com';
@@ -91,9 +87,26 @@
         contEdit.style.display = 'block';
     }
 
-    function handleUpdateProfileRequest(){
+    async function handleUpdateProfileRequest(){
         const contEdit = document.getElementById('container-edit');
         const cont = document.getElementById('container');
+
+        const payload = {
+            name: document.getElementById('input-name').value, 
+            email: document.getElementById('input-email').value, 
+            interests: document.getElementById('input-interests').value
+        };
+
+        const response = await fetch('http://localhost:3000/update-profile', {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        const jsonResponse = await response.json();
+
 
         document.getElementById('name').textContent =document.getElementById('input-name').value;
         document.getElementById('email').textContent = document.getElementById('input-email').value;
